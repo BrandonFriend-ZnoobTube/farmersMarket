@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Edit Product</title>
+</head>
+<body>
+<h1>Edit <%= product.name %></h1>
+<form action="/products/<%= product._id %>?_method=PUT" method="POST">
+  <label for="name"> Product Name
+    <input type="text" id="name" name="name" value="<%= product.name %>">
+  </label>
+  <label for="price"> Price (Unit)
+    <input type="number" id="price" name="price" value="<%= product.price %>">
+  </label>
+  <label for="category">Select Category</label>
+  <select name="category" id="category">
+    <% for(let prodType of productTypes) { %>
+    <option value="<%=prodType%>" <% prodType === product.category ? 'selected' : ''%>><%=prodType%></option>
+    <% } %>
+  </select>
+  <button type="submit">SUBMIT</button>
+</form>
+<a href="/products">All Products</a>
+</body>
+</html>

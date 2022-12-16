@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Product = require('./models/product');
+const Product = require('../models/product');
 
 mongoose.set('strictQuery', false);
 mongoose.connect('mongodb://127.0.0.1:27017/test')
@@ -10,7 +10,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/test')
     console.log(`Error: ${ err }`);
   });
 
-const seedData = [
+const seedProduct = [
   {
     name: 'Celery',
     price: 0.5,
@@ -43,7 +43,7 @@ const seedData = [
   }
 ];
 
-Product.insertMany(seedData)
+Product.insertMany(seedProduct)
   .then(res => {
     console.log(res);
   }).catch(e => {

@@ -7,6 +7,7 @@ const TryAsync = require('./utils/TryAsync');
 const ExpressError = require('./utils/ExpressError');
 
 const Product = require('./models/product');
+const Farm = require('./models/farm');
 
 mongoose.set('strictQuery', false);
 mongoose.connect('mongodb://127.0.0.1:27017/test')
@@ -34,14 +35,29 @@ app.get('/products', TryAsync(async (req, res, next) => {
   res.render('products/index', { products });
 }));
 
+app.get('/farms', TryAsync(async (req, res) => {
+  const farms = await Farm.find({});
+  res.render('farms/index', { farms })
+}));
+
 app.get('/products/new', (req, res) => {
   res.render('products/new', { productTypes });
+});
+
+app.get('/farms/new', (req, res) => {
+  res.render('farms/new');
 });
 
 app.get('/products/:id', TryAsync(async (req, res, next) => {
   const { id } = req.params;
   const product = await Product.findById(id);
   res.render('products/detail', { product });
+}));
+
+app.get('farms/:id', TryAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const farm = await Farm.findById(id);
+  res.render('farms/detail', { farm });
 }));
 
 app.get('/products/:id/edit', TryAsync(async (req, res, next) => {
@@ -62,10 +78,22 @@ app.put('/products/:id', TryAsync(async (req, res, next) => {
   res.redirect(`/products/${ editedProduct._id }`);
 }));
 
+app.put('/farms/:id', TryAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const editedFarm = await Farm.findByIdAndUpdate(id, req.body, { runValidators: true });
+  res.redirect(`/farms/${ editedFarm._id }`);
+}));
+
 app.delete('/products/:id', TryAsync(async (req, res, next) => {
   const { id } = req.params;
   await Product.findByIdAndDelete(id);
   res.redirect('/products');
+}));
+
+app.delete('/farms/:id', TryAsync(async (req, res, next) => {
+  const { id } = req.params;
+  await Farm.findByIdAndDelete(id);
+  res.redirect('/farms');
 }));
 
 app.all('*', (req, res, next) => {

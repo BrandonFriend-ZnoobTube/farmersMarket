@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const productTypes = require('./productTypes');
+const { Schema } = mongoose;
 
-const productSchema = new mongoose.Schema({
+const productSchema = new Schema({
   name: {
     type: String,
     required: true
@@ -14,6 +15,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     lowercase: true,
     enum: productTypes
+  },
+  farm: {
+    type: Schema.Types.ObjectId,
+    ref: 'Farm'
   }
 })
 

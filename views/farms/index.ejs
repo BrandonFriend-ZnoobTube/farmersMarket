@@ -5,11 +5,15 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>HOME</title>
+  <title>All Farms</title>
 </head>
 <body>
-<h1>Hello World!</h1>
-<a href="/products">Products</a>
-<a href="/farms">Farms</a>
+<h1>All Farms</h1>
+<ul>
+  <% for(let farm of farms) { %>
+    <li><a href="/farms/<%= farm._id %>"><%= farm.name %></a></li>
+  <% } %>
+</ul>
+<a href="/farms/new">Create Farm</a>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const productTypes = require('./productTypes');
 const { Schema } = mongoose;
 
@@ -16,12 +16,14 @@ const productSchema = new Schema({
     lowercase: true,
     enum: productTypes
   },
-  farm: {
-    type: Schema.Types.ObjectId,
-    ref: 'Farm'
-  }
-})
+  farm: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Farm'
+    }
+  ]
+});
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;

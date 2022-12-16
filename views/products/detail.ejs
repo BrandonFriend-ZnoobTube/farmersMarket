@@ -13,6 +13,11 @@
   <li>$<%= product.price %></li>
   <li><%= product.category %></li>
 </ul>
+<ul>
+  <% for (let farm of product.farm) {%>
+    <li><a href="/farms/<%= farm._id %>"><%= farm.name %></a></li>
+  <% } %>
+</ul>
 <a href="/products/<%= product._id %>/edit">Edit Product</a>
 <a href="/products">All Products</a>
 <form action="/products/<%= product._id %>?_method=DELETE" method="POST">

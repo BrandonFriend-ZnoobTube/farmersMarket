@@ -50,14 +50,26 @@ app.get('/farms/new', (req, res) => {
 
 app.get('/products/:id', TryAsync(async (req, res, next) => {
   const { id } = req.params;
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate('farm', 'name');
   res.render('products/detail', { product });
 }));
 
 app.get('/farms/:id', TryAsync(async (req, res, next) => {
   const { id } = req.params;
-  const farm = await Farm.findById(id);
+  const farm = await Farm.findById(id).populate('products');
   res.render('farms/detail', { farm });
+}));
+
+app.get('/farms/:id/products', TryAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const farm = await Farm.findById(id).populate('products');
+  res.render('farms/editFarmProducts', { farm, productTypes });
+}));
+
+app.get('/farms/:id/products/new', TryAsync(async (req, res) => {
+  const { id } = req.params;
+  const farm = await Farm.findById(id);
+  res.render('farms/newFarmProduct', { farm, productTypes });
 }));
 
 app.get('/products/:id/edit', TryAsync(async (req, res, next) => {
@@ -82,6 +94,18 @@ app.post('/farms/create', TryAsync(async (req, res, next) => {
   const newFarm = new Farm(req.body);
   await newFarm.save();
   res.redirect(`/farms/${ newFarm._id }`);
+}));
+
+app.post('/farms/:id/product/new', TryAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const farm = await Farm.findById(id);
+  const { name, price, category } = req.body;
+  const product = new Product({ name, price, category });
+  farm.products.push(product);
+  product.farm = farm;
+  await farm.save();
+  await product.save();
+  res.redirect(`/farms/${ farm._id }`);
 }));
 
 app.put('/products/:id', TryAsync(async (req, res, next) => {

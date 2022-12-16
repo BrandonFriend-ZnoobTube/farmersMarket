@@ -37,7 +37,7 @@ app.get('/products', TryAsync(async (req, res, next) => {
 
 app.get('/farms', TryAsync(async (req, res) => {
   const farms = await Farm.find({});
-  res.render('farms/index', { farms })
+  res.render('farms/index', { farms });
 }));
 
 app.get('/products/new', (req, res) => {
@@ -54,7 +54,7 @@ app.get('/products/:id', TryAsync(async (req, res, next) => {
   res.render('products/detail', { product });
 }));
 
-app.get('farms/:id', TryAsync(async (req, res, next) => {
+app.get('/farms/:id', TryAsync(async (req, res, next) => {
   const { id } = req.params;
   const farm = await Farm.findById(id);
   res.render('farms/detail', { farm });
@@ -66,10 +66,22 @@ app.get('/products/:id/edit', TryAsync(async (req, res, next) => {
   res.render('products/edit', { product, productTypes });
 }));
 
-app.post('/products/create',TryAsync(async (req, res, next) => {
+app.get('/farms/:id/edit', TryAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const farm = await Farm.findById(id);
+  res.render('farms/edit', { farm });
+}));
+
+app.post('/products/create', TryAsync(async (req, res, next) => {
   const newProduct = new Product(req.body);
   await newProduct.save();
   res.redirect(`/products/${ newProduct._id }`);
+}));
+
+app.post('/farms/create', TryAsync(async (req, res, next) => {
+  const newFarm = new Farm(req.body);
+  await newFarm.save();
+  res.redirect(`/farms/${ newFarm._id }`);
 }));
 
 app.put('/products/:id', TryAsync(async (req, res, next) => {
@@ -101,8 +113,10 @@ app.all('*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  const { statusCode = 500} = err;
-  if (!err.message) { err.message = 'Something went wrong'; }
+  const { statusCode = 500 } = err;
+  if (!err.message) {
+    err.message = 'Something went wrong';
+  }
   res.status(statusCode).render('error', { err });
 });
 
